@@ -5,3 +5,8 @@ html, body, #map-canvas {
 	margin: 0px;
 	padding: 0px;
 }
+
+#fb-login-popup {
+	position:fixed;
+	z-index:99999;
+}
