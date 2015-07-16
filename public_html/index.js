@@ -34,10 +34,10 @@ $('[data-goto]').click(function()
 });
 
 /**
- *	Initialize FB API
+ *	initialize FB API
  **/
 $(document).ready(function()
-{
+{	
 	$.ajaxSetup({ cache: true });
 	$.getScript('//connect.facebook.net/en_US/sdk.js', function()
 	{
@@ -109,7 +109,7 @@ function testAPI() {
 			{
 				path: lineCoords,
 				geodesic: true,
-				strokeColor: '#FF0000',
+				strokeColor: '#BFBFBF',
 				strokeOpacity: 1,
 				strokeWeight: 5
 			});
@@ -125,7 +125,7 @@ function testAPI() {
  *	A JSON object with "lng" and "lat" will be passed
  *	to callback on success, or false on fail.
  **/
-function GetGeocode(address, callback)
+function getGeocode(address, callback)
 {
 	$.get('https://maps.googleapis.com/maps/api/geocode/json',{address: address}, function(data)
 	{
@@ -136,14 +136,14 @@ function GetGeocode(address, callback)
 	}, "json");
 }
 
-function InitializeMap() {
+function initializeMap() {
   map = new google.maps.Map(document.getElementById('map-canvas'), {
     zoom: 8,
 	minZoom: 3,
     center: {lat: -34.397, lng: 150.644}
   });
   
-  GetGeocode("Corona+CA",function(loc)
+  getGeocode("Corona+CA",function(loc)
   {
 	  var testCircleOptions = {
 		strokeColor: '#5370EC',
@@ -159,7 +159,7 @@ function InitializeMap() {
 	  people.push(new google.maps.Circle(testCircleOptions));
   });
   
-  GetGeocode("Rock+Springs+WY",function(loc)
+  getGeocode("Rock+Springs+WY",function(loc)
   {
 	  var testCircleOptions = {
 		strokeColor: '#5370EC',
@@ -175,7 +175,7 @@ function InitializeMap() {
 	  people.push(new google.maps.Circle(testCircleOptions));
   });
   
-  GetGeocode("Oslo+Norway",function(loc)
+  getGeocode("Oslo+Norway",function(loc)
   {
 	  var testCircleOptions = {
 		strokeColor: '#5370EC',
@@ -195,7 +195,7 @@ function InitializeMap() {
 /**
  *	Retrieve FB user's address.
  **/
-function GetLocation(user)
+function getLocation(user)
 {
 	
 }
@@ -204,5 +204,5 @@ $('body').on('click', '[data-show]',function(){ $($(this).attr('data-show')).sho
 $('body').on('click', '[data-hide]',function(){ $($(this).attr('data-hide')).hide(); return false; });
 $('body').on('click', '[data-togg]',function(){ $($(this).attr('data-togg')).toggle(); return false; });
 
-google.maps.event.addDomListener(window, 'load', InitializeMap);
+google.maps.event.addDomListener(window, 'load', initializeMap);
 

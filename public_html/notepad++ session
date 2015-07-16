@@ -1,10 +1,11 @@
 <NotepadPlus>
     <Session activeView="0">
-        <mainView activeIndex="3">
-            <File firstVisibleLine="56" xOffset="0" scrollWidth="864" startPos="1769" endPos="1769" selMode="0" lang="Javascript" encoding="-1" filename="Z:\BitBucket\GeoNet\public_html\index.js" />
+        <mainView activeIndex="1">
+            <File firstVisibleLine="164" xOffset="0" scrollWidth="1080" startPos="5010" endPos="5010" selMode="0" lang="Javascript" encoding="-1" filename="Z:\BitBucket\GeoNet\public_html\index.js" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="432" startPos="285" endPos="285" selMode="0" lang="Javascript" encoding="-1" filename="Z:\BitBucket\GeoNet\public_html\person.js" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="324" startPos="38" endPos="38" selMode="0" lang="CSS" encoding="-1" filename="Z:\BitBucket\GeoNet\public_html\index.css" />
-            <File firstVisibleLine="0" xOffset="0" scrollWidth="342" startPos="364" endPos="364" selMode="0" lang="CSS" encoding="-1" filename="Z:\BitBucket\GeoNet\public_html\global.css" />
-            <File firstVisibleLine="0" xOffset="0" scrollWidth="882" startPos="0" endPos="0" selMode="0" lang="HTML" encoding="-1" filename="Z:\BitBucket\GeoNet\public_html\index.html" />
+            <File firstVisibleLine="39" xOffset="0" scrollWidth="513" startPos="1062" endPos="1062" selMode="0" lang="CSS" encoding="-1" filename="Z:\BitBucket\GeoNet\public_html\global.css" />
+            <File firstVisibleLine="13" xOffset="0" scrollWidth="2328" startPos="2116" endPos="2116" selMode="0" lang="HTML" encoding="-1" filename="Z:\BitBucket\GeoNet\public_html\index.html" />
         </mainView>
         <subView activeIndex="0" />
     </Session>
