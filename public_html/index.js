@@ -103,7 +103,7 @@ function GetGeocode(address, callback)
 function InitializeMap() {
   map = new google.maps.Map(document.getElementById('map-canvas'), {
     zoom: 8,
-	maxZoom: 3,
+	minZoom: 3,
     center: {lat: -34.397, lng: 150.644}
   });
 }
