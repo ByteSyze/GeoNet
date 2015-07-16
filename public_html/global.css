@@ -12,17 +12,49 @@ html, body, #map-canvas {
 	left: 0px;
 	width: 100%;
 	height: 100%;
-	z-index: 99999;
+	z-index: 1;
 	position: fixed;
-	background: rgba(0,0,0,0.5);
+	background-color: rgba(0,0,0,0.5);
 }
 
 #fb-login-popup > div {
-	top: 40%;
-	left: 40%;
+	top: 50%;
+	left: 50%;
 	width: 300px;
 	height: 150px;
+	margin-top: -75px;
+	margin-left: -150px;
+	padding: 20px;
 	position: fixed;
-	border: 1px solid gray;
+	line-height: 54px;
+	text-align: center;
+	border-radius: 10px;
 	background-color: white;
+	border: 2px solid #BFBFBF;
+}
+
+.page {
+	overflow: hidden;
+	height: 0px;
+}
+
+.active {
+	height: auto;
+}
+
+.logo {
+	background-image: url('/images/icons/logo-64px.png');
+	margin: auto;
+}
+
+.logo.small {
+	background-size: 32px 32px;
+	width: 32px;
+	height: 32px;
+}
+
+.logo.medium {
+	background-size: 64px 64px;
+	width: 64px;
+	height: 64px;
 }
