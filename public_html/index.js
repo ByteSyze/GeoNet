@@ -3,8 +3,6 @@
 var map;
 var geocoder;
 
-var user;
-
 $('[data-goto]').click(function()
 {
 	var gt = $(this).attr('data-goto');
@@ -83,7 +81,8 @@ function checkLoginState() {
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
-function initializeFB() {
+function initializeFB()
+{
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me?fields=name,id', function(response) {
 		console.log('Successful login for: ' + response.name);
@@ -94,10 +93,7 @@ function initializeFB() {
 		$popup = $('#fb-login-popup > div');
 		$popup.animate({'margin-top':-($popup.outerHeight()/2)});
 		
-		getLocation(response.id, function(location)
-		{
-			user = new User(response.id, response.name, location);
-		});
+		user = new User(response.id, response.name);
     });
 }
 
