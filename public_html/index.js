@@ -14,11 +14,19 @@ $('[data-goto]').click(function()
 		$(this).css('height','');
 		
 		$page = $('[data-page="'+gt+'"]');
+		$popup = $('#fb-login-popup > div');
+		
 		$page.addClass('active');
 		pageHeight = $page.height();
+		popupOuterHeight = $popup.outerHeight();
 		$page.removeClass('active');
 		
-		$page.animate({'height':pageHeight+'px'}, 500, function(){ $page.addClass('active'); $page.css('height',''); });
+		$popup.animate({'margin-top':-(popupOuterHeight/2)});
+		$page.animate({'height':pageHeight+'px'}, 500, function()
+		{ 
+			$page.addClass('active');
+			$page.css('height','');
+		});
 	});
 	
 });
@@ -78,9 +86,10 @@ function checkLoginState() {
 function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
+		console.log('Successful login for: ' + response.name);
+		document.getElementById('status').innerHTML =
+        'Welcome, ' + response.name;
+		$('#status').after('<span class="button" data-hide="#fb-login-popup">Continue</span>');
     });
 }
 
@@ -106,6 +115,22 @@ function InitializeMap() {
 	minZoom: 3,
     center: {lat: -34.397, lng: 150.644}
   });
+  
+  GetGeocode("Corona+CA",function(loc)
+  {
+	  var testCircleOptions = {
+		strokeColor: '#5370EC',
+		strokeOpacity: 1,
+		strokeWeight: 5,
+		fillColor: '#99B8FF',
+		fillOpacity: 1,
+		map: map,
+		center: loc,
+		radius: 50000
+	  };
+	  
+	  tc = new google.maps.Circle(testCircleOptions);
+  });
 }
 
 /**
@@ -115,6 +140,10 @@ function GetLocation(user)
 {
 	
 }
+
+$('body').on('click', '[data-show]',function(){ $($(this).attr('data-show')).show(); return false; });
+$('body').on('click', '[data-hide]',function(){ $($(this).attr('data-hide')).hide(); return false; });
+$('body').on('click', '[data-togg]',function(){ $($(this).attr('data-togg')).toggle(); return false; });
 
 google.maps.event.addDomListener(window, 'load', InitializeMap);
 
