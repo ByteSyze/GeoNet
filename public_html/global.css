@@ -37,7 +37,7 @@ html, body, #map-canvas {
 }
 
 #continue {
-	display: hidden;
+	display: none;
 }
 
 .button {

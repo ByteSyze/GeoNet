@@ -92,6 +92,31 @@ function testAPI() {
 		
 		$popup = $('#fb-login-popup > div');
 		$popup.animate({'margin-top':-($popup.outerHeight()/2)});
+		
+		var lastPerson = people[0];
+		var i;
+		var lineCoords;
+		var path;
+		
+		for(i = 1; i < people.length; i++)
+		{
+			lineCoords = [
+				lastPerson.center,
+				people[i].center
+			];
+			
+			path = new google.maps.Polyline(
+			{
+				path: lineCoords,
+				geodesic: true,
+				strokeColor: '#FF0000',
+				strokeOpacity: 1,
+				strokeWeight: 5
+			});
+			
+			path.setMap(map);
+			lastPerson = people[i];
+		}
     });
 }
 
@@ -135,6 +160,22 @@ function InitializeMap() {
   });
   
   GetGeocode("Rock+Springs+WY",function(loc)
+  {
+	  var testCircleOptions = {
+		strokeColor: '#5370EC',
+		strokeOpacity: 1,
+		strokeWeight: 5,
+		fillColor: '#99B8FF',
+		fillOpacity: 1,
+		map: map,
+		center: loc,
+		radius: 50000
+	  };
+	  
+	  people.push(new google.maps.Circle(testCircleOptions));
+  });
+  
+  GetGeocode("Oslo+Norway",function(loc)
   {
 	  var testCircleOptions = {
 		strokeColor: '#5370EC',
