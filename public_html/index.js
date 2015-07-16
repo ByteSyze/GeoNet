@@ -1,8 +1,9 @@
 /*Copyright (C) Tyler Hackett 2015*/
 
 var map;
+var geocoder;
 
-var people = new Array();
+var user;
 
 $('[data-goto]').click(function()
 {
@@ -60,7 +61,7 @@ $(document).ready(function()
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      testAPI();
+      initializeFB();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'You must login to use GeoNet.';
@@ -82,58 +83,59 @@ function checkLoginState() {
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
-function testAPI() {
+function initializeFB() {
     console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
+    FB.api('/me?fields=name,id', function(response) {
 		console.log('Successful login for: ' + response.name);
 		document.getElementById('status').innerHTML =
         'Welcome, ' + response.name;
-		$('#continue').show();
+		$('#continue').css('display','block');
 		
 		$popup = $('#fb-login-popup > div');
 		$popup.animate({'margin-top':-($popup.outerHeight()/2)});
 		
-		var lastPerson = people[0];
-		var i;
-		var lineCoords;
-		var path;
-		
-		for(i = 1; i < people.length; i++)
+		getLocation(response.id, function(location)
 		{
-			lineCoords = [
-				lastPerson.center,
-				people[i].center
-			];
-			
-			path = new google.maps.Polyline(
-			{
-				path: lineCoords,
-				geodesic: true,
-				strokeColor: '#BFBFBF',
-				strokeOpacity: 1,
-				strokeWeight: 5
-			});
-			
-			path.setMap(map);
-			lastPerson = people[i];
-		}
+			user = new User(response.id, response.name, location);
+		});
     });
 }
 
 /**
+ *	Retrieve user's location from Facebook.
+ **/
+function getLocation(uid, callback)
+{
+	FB.api('/'+uid+'?fields=location', function(response)
+	{
+		console.log(response.location);
+		
+		FB.api('/'+response.location.id+'?fields=location',function(response)
+		{
+			var longitude 	= response.location.longitude;
+			var latitude 	= response.location.latitude;
+			
+			console.log(longitude);
+			
+			callback(new google.maps.LatLng(latitude, longitude));
+		});
+	});
+}
+
+/**
  *	Convert postal address into longitude & latitude.
- *	A JSON object with "lng" and "lat" will be passed
+ *	A LatLng object & status will be passed
  *	to callback on success, or false on fail.
  **/
 function getGeocode(address, callback)
 {
-	$.get('https://maps.googleapis.com/maps/api/geocode/json',{address: address}, function(data)
+	geocoder.geocode({'address':address}, function(results, status)
 	{
-		if(data.status === "OK")
-			callback(data.results[0].geometry.location);
+		if(status === google.maps.GeocoderStatus.OK)
+			callback(results[0].geometry.location, status);
 		else
-			callback(false);
-	}, "json");
+			callback(false, status);
+	});
 }
 
 function initializeMap() {
@@ -143,61 +145,7 @@ function initializeMap() {
     center: {lat: -34.397, lng: 150.644}
   });
   
-  getGeocode("Corona+CA",function(loc)
-  {
-	  var testCircleOptions = {
-		strokeColor: '#5370EC',
-		strokeOpacity: 1,
-		strokeWeight: 5,
-		fillColor: '#99B8FF',
-		fillOpacity: 1,
-		map: map,
-		center: loc,
-		radius: 50000
-	  };
-	  
-	  people.push(new google.maps.Circle(testCircleOptions));
-  });
-  
-  getGeocode("Rock+Springs+WY",function(loc)
-  {
-	  var testCircleOptions = {
-		strokeColor: '#5370EC',
-		strokeOpacity: 1,
-		strokeWeight: 5,
-		fillColor: '#99B8FF',
-		fillOpacity: 1,
-		map: map,
-		center: loc,
-		radius: 50000
-	  };
-	  
-	  people.push(new google.maps.Circle(testCircleOptions));
-  });
-  
-  getGeocode("Oslo+Norway",function(loc)
-  {
-	  var testCircleOptions = {
-		strokeColor: '#5370EC',
-		strokeOpacity: 1,
-		strokeWeight: 5,
-		fillColor: '#99B8FF',
-		fillOpacity: 1,
-		map: map,
-		center: loc,
-		radius: 50000
-	  };
-	  
-	  people.push(new google.maps.Circle(testCircleOptions));
-  });
-}
-
-/**
- *	Retrieve FB user's address.
- **/
-function getLocation(user)
-{
-	
+  geocoder = google.maps.Geocoder();
 }
 
 $('body').on('click', '[data-show]',function(){ $($(this).attr('data-show')).show(); return false; });
