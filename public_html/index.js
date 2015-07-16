@@ -2,6 +2,27 @@
 
 var map;
 
+$('[data-goto]').click(function()
+{
+	var gt = $(this).attr('data-goto');
+	
+	var pageHeight;
+	
+	$('.active').animate({'height':'0px'}, 500, function()
+	{
+		$(this).removeClass('active');
+		$(this).css('height','');
+		
+		$page = $('[data-page="'+gt+'"]');
+		$page.addClass('active');
+		pageHeight = $page.height();
+		$page.removeClass('active');
+		
+		$page.animate({'height':pageHeight+'px'}, 500, function(){ $page.addClass('active'); $page.css('height',''); });
+	});
+	
+});
+
 /**
  *	Initialize FB API
  **/
@@ -82,6 +103,7 @@ function GetGeocode(address, callback)
 function InitializeMap() {
   map = new google.maps.Map(document.getElementById('map-canvas'), {
     zoom: 8,
+	maxZoom: 3,
     center: {lat: -34.397, lng: 150.644}
   });
 }

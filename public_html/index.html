@@ -15,13 +15,26 @@
 		<div id='fb-login-popup'>
 		
 			<div>
-				<div class='active page'>
+				<div class='active page login' data-page='login'>
 					<div class='logo medium'></div>
 					
 					<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
 					</fb:login-button>
 					<div id="status"></div>
-				<div>
+					<div class='info'>
+						<span data-goto='about'>About</span>
+						<span data-goto='privacy'>Privacy Policy</span>
+					</div>
+				</div>
+				<div class='page about' data-page='about'>
+					<h2>What is GeoNet?</h2>
+					<p>GeoNet is a web app that creates a geographical net representation of your Facebook friends.</p>
+					
+					<div class='info'>
+						<span data-goto='login'>Back</span>
+						<span data-goto='privacy'>Privacy Policy</span>
+					</div>
+				</div>
 			</div>
 			
 		</div>
