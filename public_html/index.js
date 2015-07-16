@@ -2,6 +2,8 @@
 
 var map;
 
+var people = new Array();
+
 $('[data-goto]').click(function()
 {
 	var gt = $(this).attr('data-goto');
@@ -34,21 +36,18 @@ $('[data-goto]').click(function()
 /**
  *	Initialize FB API
  **/
-$(document).ready(function() {
+$(document).ready(function()
+{
 	$.ajaxSetup({ cache: true });
-	$.getScript('//connect.facebook.net/en_US/sdk.js', function(){
-	FB.init({
-		appId: '1610996765822675',
-		xfbml: true,
-		version: 'v2.4' // or v2.0, v2.1, v2.0
-	});     
-	$('#loginbutton,#feedbutton').removeAttr('disabled');
-	FB.getLoginStatus(statusChangeCallback);
-	
-	FB.login(function(){
-		// Note: The call will only work if you accept the permission request
-		FB.api('/me/feed', 'post', {message: 'Hello, world!'});
-	}, {scope: 'publish_actions'});
+	$.getScript('//connect.facebook.net/en_US/sdk.js', function()
+	{
+		FB.init({
+			appId: '1610996765822675',
+			xfbml: true,
+			version: 'v2.4' // or v2.0, v2.1, v2.0
+		});     
+		$('#loginbutton,#feedbutton').removeAttr('disabled');
+		FB.getLoginStatus(statusChangeCallback);
 	});
 });
 // This is called with the results from from FB.getLoginStatus().
@@ -89,7 +88,10 @@ function testAPI() {
 		console.log('Successful login for: ' + response.name);
 		document.getElementById('status').innerHTML =
         'Welcome, ' + response.name;
-		$('#status').after('<span class="button" data-hide="#fb-login-popup">Continue</span>');
+		$('#continue').show();
+		
+		$popup = $('#fb-login-popup > div');
+		$popup.animate({'margin-top':-($popup.outerHeight()/2)});
     });
 }
 
@@ -129,7 +131,23 @@ function InitializeMap() {
 		radius: 50000
 	  };
 	  
-	  tc = new google.maps.Circle(testCircleOptions);
+	  people.push(new google.maps.Circle(testCircleOptions));
+  });
+  
+  GetGeocode("Rock+Springs+WY",function(loc)
+  {
+	  var testCircleOptions = {
+		strokeColor: '#5370EC',
+		strokeOpacity: 1,
+		strokeWeight: 5,
+		fillColor: '#99B8FF',
+		fillOpacity: 1,
+		map: map,
+		center: loc,
+		radius: 50000
+	  };
+	  
+	  people.push(new google.maps.Circle(testCircleOptions));
   });
 }
 

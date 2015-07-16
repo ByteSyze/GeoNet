@@ -36,7 +36,13 @@ html, body, #map-canvas {
 	display: block;
 }
 
+#continue {
+	display: hidden;
+}
+
 .button {
+	display: block;
+	font-size:17px;
 	color: #808080;
 	cursor: pointer;
 	font-weight: bold;
