@@ -27,11 +27,11 @@ function User(id, name)
 		
 			usr.location 	= new google.maps.LatLng(latitude, longitude);
 			usr.icon		= new google.maps.Circle(usr.getIconOptions());
+	
+			users.push(usr);
+			usr.loadFriends();
 		});
 	});
-	
-	users.push(this);
-	this.loadFriends();
 }
 
 User.prototype.getName = function()
@@ -172,6 +172,21 @@ function Net(from, to)
 {
 	this.from = from;
 	this.to = to;
+	
+	this.netCoords = [
+		from.location,
+		to.location,
+	];
+	
+	this.netPath = new google.maps.Polyline({
+		path: this.netCoords,
+		geodesic: true,
+		strokeColor: '#BFBFBF',
+		strokeOpacity: 1.0,
+		strokeWeight: 3
+	});
+	
+	this.netPath.setMap(map);
 }
 
 Net.prototype.contains = function(user)
