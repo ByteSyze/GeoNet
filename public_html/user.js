@@ -14,6 +14,7 @@ function User(id, name)
 	this.id			= id;
 	this.name		= name;
 	this.friends	= [];
+	this.net		= [];
 	
 	usr = this;
 	
@@ -31,6 +32,7 @@ function User(id, name)
 	
 	users.push(this);
 	this.loadFriends();
+	this.generateNet();
 }
 
 User.prototype.getName = function()
@@ -67,6 +69,26 @@ User.prototype.loadFriends = function()
 		
 		depth++;
 	}
+}
+
+User.prototype.generateNet = function()
+{
+	this.friends.forEach(function(user)
+	{
+		var n = null //Net to add to this user.
+		
+		user.net.forEach(function(net)
+		{
+			//Check user for existing net between them.
+			if(net.contains(this))
+				n = net;
+		});
+		
+		if(n)
+			this.net.push(n);
+		else
+			this.net.push(new Net(this, user));
+	});
 }
 
 User.prototype.getFriends = function()
@@ -135,4 +157,21 @@ User.prototype.getIconOptions = function()
 		};
 	}
 	return iconOptions;
+}
+
+///////////////////////////////
+
+/**
+ *	Create a net from one User to another. Automatically generates 
+ *	a graphical net between the two Users and displays it on the map.
+ **/
+function Net(from, to)
+{
+	this.from = from;
+	this.to = to;
+}
+
+Net.prototype.contains = function(user)
+{
+	return (this.a === user || this.b === user);
 }
