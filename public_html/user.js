@@ -6,7 +6,7 @@ var users = [];
 var friendDepth = 2; //How many friends of friends can be loaded.
 var depth = 0;
 	  
-function User(id, name)
+function User(id, name, index, callback)
 {
 	console.log(name);
 	console.log(id);
@@ -30,8 +30,12 @@ function User(id, name)
 	
 			users.push(usr);
 			usr.loadFriends();
+			
+			if(callback)
+				callback(index, this);
 		});
 	});
+	
 }
 
 User.prototype.getName = function()
@@ -47,7 +51,7 @@ User.prototype.loadFriends = function()
 		
 		FB.api('/'+this.id+'/friends',function(response)
 		{
-			response.data.forEach(function(userData)
+			response.data.forEach(function(userData, index)
 			{
 				var friend = null;
 				
@@ -62,12 +66,17 @@ User.prototype.loadFriends = function()
 				if(friend)
 					usr.addFriend(friend);
 				else
-					usr.addFriend(new User(userData.id, userData.name));
+					usr.addFriend(new User(userData.id, userData.name, index, function(i, __usr)
+					{ 
+						console.log('user created');
+						console.log(i);
+						console.log(usr.friends.length-1);
+						console.log(i == users.length-1);
+						if(i==users.length-1) 
+							usr.generateNet(); //If last user has been created, generate the root user's net.
+					}));
 			});
-			
-			usr.generateNet();
 		});
-		
 		depth++;
 	}
 }
