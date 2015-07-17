@@ -3,7 +3,7 @@
 var user;
 var users = [];
 
-var friendDepth = 1; //How many friends of friends can be loaded.
+var friendDepth = 2; //How many friends of friends can be loaded.
 var depth = 0;
 	  
 function User(id, name)
@@ -16,7 +16,7 @@ function User(id, name)
 	this.friends	= [];
 	this.net		= [];
 	
-	usr = this;
+	var usr = this;
 	
 	FB.api('/'+this.id+'?fields=location', function(response)
 	{			
@@ -32,7 +32,6 @@ function User(id, name)
 	
 	users.push(this);
 	this.loadFriends();
-	this.generateNet();
 }
 
 User.prototype.getName = function()
@@ -44,7 +43,7 @@ User.prototype.loadFriends = function()
 {
 	if(depth < friendDepth)
 	{
-		usr = this;
+		var usr = this;
 		
 		FB.api('/'+this.id+'/friends',function(response)
 		{
@@ -65,6 +64,8 @@ User.prototype.loadFriends = function()
 				else
 					usr.addFriend(new User(userData.id, userData.name));
 			});
+			
+			usr.generateNet();
 		});
 		
 		depth++;
@@ -73,21 +74,23 @@ User.prototype.loadFriends = function()
 
 User.prototype.generateNet = function()
 {
-	this.friends.forEach(function(user)
+	var usr = this;
+	
+	this.friends.forEach(function(friend)
 	{
 		var n = null //Net to add to this user.
 		
-		user.net.forEach(function(net)
+		friend.net.forEach(function(net)
 		{
 			//Check user for existing net between them.
-			if(net.contains(this))
+			if(net.contains(usr))
 				n = net;
 		});
 		
 		if(n)
-			this.net.push(n);
+			usr.net.push(n);
 		else
-			this.net.push(new Net(this, user));
+			usr.net.push(new Net(usr, friend));
 	});
 }
 
@@ -173,5 +176,5 @@ function Net(from, to)
 
 Net.prototype.contains = function(user)
 {
-	return (this.a === user || this.b === user);
+	return (this.from === user || this.to === user);
 }
