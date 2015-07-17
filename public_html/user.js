@@ -1,6 +1,10 @@
 /*Copyright (C) Tyler Hackett 2015*/
 
 var user;
+var users = [];
+
+var friendDepth = 1; //How many friends of friends can be loaded.
+var depth = 0;
 	  
 function User(id, name)
 {
@@ -25,6 +29,7 @@ function User(id, name)
 		});
 	});
 	
+	users.push(this);
 	this.loadFriends();
 }
 
@@ -35,15 +40,33 @@ User.prototype.getName = function()
 
 User.prototype.loadFriends = function()
 {
-	usr = this;
-	
-	FB.api('/'+this.id+'/friends',function(response)
+	if(depth < friendDepth)
 	{
-		response.data.forEach(function(userData)
+		usr = this;
+		
+		FB.api('/'+this.id+'/friends',function(response)
 		{
-			usr.addFriend(new User(userData.id, userData.name));
+			response.data.forEach(function(userData)
+			{
+				var friend = null;
+				
+				for(var i = 0; i < users.length; i++)
+				{
+					if(users[i].id === userData.id)
+					{
+						friend = users[i];
+						break;
+					}
+				}
+				if(friend)
+					usr.addFriend(friend);
+				else
+					usr.addFriend(new User(userData.id, userData.name));
+			});
 		});
-	});
+		
+		depth++;
+	}
 }
 
 User.prototype.getFriends = function()
@@ -58,7 +81,18 @@ User.prototype.setFriends = function(friends)
 
 User.prototype.addFriend = function(friend)
 {
-	if(!this.friends.includes(friend))
+	var alreadyExists = false;
+	
+	for(var i = 0; i < this.friends.length; i++)
+	{
+		if(this.friends[i] === friend)
+		{
+			alreadyExists = true;
+			break;
+		}
+	}
+	
+	if(!alreadyExists)
 		this.friends.push(friend);
 }
 
