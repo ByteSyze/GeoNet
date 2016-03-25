@@ -80,7 +80,7 @@ html, body, #map-canvas {
 }
 
 .logo {
-	background-image: url('/images/icons/logo-64px.png');
+	background-image: url('http://insomniac10102.github.io/GeoNet/images/icons/logo-64px.png');
 	margin: auto;
 }
 
